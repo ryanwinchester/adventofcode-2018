@@ -141,7 +141,7 @@ defmodule Advent.Day3 do
       |> Enum.map(fn {id, _point} -> id end)
       |> Enum.uniq()
 
-    [id] = (claim_ids -- claims_with_overlap)
+    [id] = claim_ids -- claims_with_overlap
 
     id
   end
