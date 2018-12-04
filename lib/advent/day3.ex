@@ -95,8 +95,7 @@ defmodule Advent.Day3 do
   def overlap_area(raw_claims) do
     raw_claims
     |> parse_claims()
-    |> Enum.map(&claim_to_points/1)
-    |> List.flatten()
+    |> Enum.flat_map(&claim_to_points/1)
     |> Enum.group_by(fn {_id, point} -> point end)
     |> Enum.filter(fn {_k, v} -> Enum.count(v) > 1 end)
     |> Enum.count()
@@ -123,8 +122,7 @@ defmodule Advent.Day3 do
     parsed_claims =
       raw_claims
       |> parse_claims()
-      |> Enum.map(&claim_to_points/1)
-      |> List.flatten()
+      |> Enum.flat_map(&claim_to_points/1)
       |> Enum.group_by(fn {_id, point} -> point end)
       |> Map.values()
 
