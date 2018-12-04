@@ -75,6 +75,9 @@ defmodule Advent.Day3 do
 
   """
 
+  @type claim_id :: pos_integer
+  @type coordinate :: {x :: non_neg_integer, y :: non_neg_integer}
+
   @doc """
   # Part One: Find the total area of overlapping fabric
 
@@ -94,7 +97,7 @@ defmodule Advent.Day3 do
 
   def overlap_area(raw_claims) do
     raw_claims
-    |> parse_claims()
+    |> Enum.map(&parse_claim/1)
     |> Enum.flat_map(&claim_to_points/1)
     |> Enum.group_by(fn {_id, point} -> point end)
     |> Enum.filter(fn {_k, v} -> Enum.count(v) > 1 end)
@@ -120,12 +123,12 @@ defmodule Advent.Day3 do
       3
 
   """
-  @spec intact_claim([binary]) :: pos_integer
+  @spec intact_claim([binary]) :: claim_id
 
   def intact_claim(raw_claims) do
     parsed_claims =
       raw_claims
-      |> parse_claims()
+      |> Enum.map(&parse_claim/1)
       |> Enum.flat_map(&claim_to_points/1)
       |> Enum.group_by(fn {_id, point} -> point end)
       |> Map.values()
@@ -153,26 +156,22 @@ defmodule Advent.Day3 do
 
   ## Example
 
-      iex> Advent.Day3.parse_claims(["#123 @ 3,2: 5x4"])
-      [
-        %{
-          "id" => 123,
-          "x" => 3,
-          "y" => 2,
-          "w" => 5,
-          "h" => 4
-        }
-      ]
+      iex> Advent.Day3.parse_claim("#123 @ 3,2: 5x4")
+      %{
+        "id" => 123,
+        "x" => 3,
+        "y" => 2,
+        "w" => 5,
+        "h" => 4
+      }
 
   """
-  @spec parse_claims([binary]) :: [map]
+  @spec parse_claim(binary) :: [map]
 
-  def parse_claims(claims) do
-    Enum.map(claims, fn claim ->
-      Regex.named_captures(~r/^#(?<id>\d+) @ (?<x>\d+),(?<y>\d+): (?<w>\d+)x(?<h>\d+)$/, claim)
-      |> Enum.map(fn {k, v} -> {k, String.to_integer(v)} end)
-      |> Enum.into(%{})
-    end)
+  def parse_claim(claim) do
+    Regex.named_captures(~r/^#(?<id>\d+) @ (?<x>\d+),(?<y>\d+): (?<w>\d+)x(?<h>\d+)$/, claim)
+    |> Enum.map(fn {k, v} -> {k, String.to_integer(v)} end)
+    |> Enum.into(%{})
   end
 
   @doc """
@@ -200,7 +199,7 @@ defmodule Advent.Day3 do
       ]
 
   """
-  @spec claim_to_points(map) :: [{id :: pos_integer, {x :: integer, y :: integer}}]
+  @spec claim_to_points(map) :: [{claim_id, coordinate}]
 
   def claim_to_points(%{"id" => id, "x" => x0, "y" => y0, "w" => w, "h" => h}) do
     for x <- 0..(w - 1), y <- 0..(h - 1) do
