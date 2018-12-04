@@ -80,13 +80,8 @@ defmodule Advent.Day3 do
     |> parse_claims()
     |> Enum.map(&claim_to_points/1)
     |> List.flatten()
-    # Remove the ID from the tuple, we just want the point coordinate pair.
-    |> Enum.map(fn {_id, point} -> point end)
-    # Group by coordinate pairs.
-    |> Enum.group_by(&(&1))
-    # Remove the ones with no overlaps.
+    |> Enum.group_by(fn {_id, point} -> point end)
     |> Enum.filter(fn {_k, v} -> Enum.count(v) > 1 end)
-    # Count the points that have overlaps.
     |> Enum.count()
   end
 
