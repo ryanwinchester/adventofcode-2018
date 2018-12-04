@@ -72,6 +72,25 @@ defmodule Advent.Day2 do
 
   """
 
+  @doc """
+  A rudimentary checksum of string IDs.
+
+  ## Examples
+
+      iex(1)> Advent.Day2.checksum([
+      ...(1)>   "abcdef",
+      ...(1)>   "bababc",
+      ...(1)>   "abbcde",
+      ...(1)>   "abcccd",
+      ...(1)>   "aabcdd",
+      ...(1)>   "abcdee",
+      ...(1)>   "ababab"
+      ...(1)> ])
+      12
+
+  """
+  @spec checksum([binary]) :: non_neg_integer
+
   def checksum(ids) do
     {twice_count, thrice_count} =
       ids
@@ -87,6 +106,26 @@ defmodule Advent.Day2 do
 
     twice_count * thrice_count
   end
+
+  @doc """
+  Find the common characters between two IDs that differ by only one character
+  in the same position.
+
+  ## Example
+
+      iex(1)> Advent.Day2.common_chars([
+      ...(1)> "abcde",
+      ...(1)> "fghij",
+      ...(1)> "klmno",
+      ...(1)> "pqrst",
+      ...(1)> "fguij",
+      ...(1)> "axcye",
+      ...(1)> "wvxyz",
+      ...(1)> ])
+      "fgij"
+
+  """
+  @spec common_chars([binary]) :: binary
 
   def common_chars(ids) do
     for i <- ids, j <- ids do

@@ -75,6 +75,23 @@ defmodule Advent.Day3 do
 
   """
 
+  @doc """
+  # Part One: Find the total area of overlapping fabric
+
+  My strategy here is to:
+
+    1. build a list of all the points (tuple of coordinate pairs)
+    2. group by the point
+    3 count all the points that have more than one claim
+
+  ## Example
+
+      iex> Advent.Day3.overlap_area(["#1 @ 1,3: 4x4", "#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2"])
+      4
+
+  """
+  @spec overlap_area([binary]) :: non_neg_integer
+
   def overlap_area(raw_claims) do
     raw_claims
     |> parse_claims()
@@ -84,6 +101,23 @@ defmodule Advent.Day3 do
     |> Enum.filter(fn {_k, v} -> Enum.count(v) > 1 end)
     |> Enum.count()
   end
+
+  @doc """
+  # Part Two: Find the one claim that has no overlap
+
+  My strategy here is to:
+
+    1. build a list of all the points (tuple of coordinate pairs, with ID)
+    2. find all the IDs of points that have more than one claim
+    3. subtract them from the list of all IDs
+
+  ## Example
+
+      iex> Advent.Day3.intact_claim(["#1 @ 1,3: 4x4", "#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2"])
+      3
+
+  """
+  @spec intact_claim([binary]) :: pos_integer
 
   def intact_claim(raw_claims) do
     parsed_claims =
