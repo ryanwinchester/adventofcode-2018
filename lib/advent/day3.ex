@@ -144,15 +144,18 @@ defmodule Advent.Day3 do
     id
   end
 
-  # Parses claims like:
-  #
-  #     "#123 @ 3,2: 5x4"
-  #
-  # into something like:
-  #
-  #     %{"id" => 123, "x" => 3, "y" => 2, "w" => 5, "h" => 4}
-  #
-  defp parse_claims(claims) do
+  @doc """
+  Parses claims to a map.
+
+  ## Example
+
+      iex> Advent.Day3.parse_claims(["#123 @ 3,2: 5x4"])
+      [%{"id" => 123, "x" => 3, "y" => 2, "w" => 5, "h" => 4}]
+
+  """
+  @spec parse_claims([binary]) :: [map]
+
+  def parse_claims(claims) do
     Enum.map(claims, fn claim ->
       Regex.named_captures(~r/^#(?<id>\d+) @ (?<x>\d+),(?<y>\d+): (?<w>\d+)x(?<h>\d+)$/, claim)
       |> Enum.map(fn {k, v} -> {k, String.to_integer(v)} end)
@@ -160,17 +163,28 @@ defmodule Advent.Day3 do
     end)
   end
 
-  # Converts a parsed claim like:
-  #
-  #     %{"id" => 123, "x" => 1, "y" => 1, "w" => 2, "h" => 2}
-  #
-  # into a list of points, which are tuples in the form of `{id, {x, y}}`, like:
-  #
-  #     [{123, {1, 1}, {123, {1, 2}, {123, {2, 1}, {123, {2, 2}]
-  #
-  defp claim_to_points(claim) do
-    for x <- 0..(claim["w"] - 1), y <- 0..(claim["h"] - 1) do
-      {claim["id"], {claim["x"] + x, claim["y"] + y}}
+  @doc """
+  Converts a parsed claim like:
+
+      %{"id" => 123, "x" => 1, "y" => 1, "w" => 2, "h" => 2}
+
+  into a list of points, which are tuples in the form of `{id, {x, y}}`, like:
+
+      [{id, {x1, y1}, {id, {x2, y2}, ...]
+
+  ## Example
+
+      iex> Advent.Day3.claim_to_points(%{
+      ...>   "id" => 123, "x" => 1, "y" => 1, "w" => 2, "h" => 2
+      ...> })
+      [{123, {1, 1}}, {123, {1, 2}}, {123, {2, 1}}, {123, {2, 2}}]
+
+  """
+  @spec claim_to_points(map) :: [{id :: pos_integer, {x :: integer, y :: integer}}]
+
+  def claim_to_points(%{"id" => id, "x" => x0, "y" => y0, "w" => w, "h" => h}) do
+    for x <- 0..(w - 1), y <- 0..(h - 1) do
+      {id, {x0 + x, y0 + y}}
     end
   end
 end
