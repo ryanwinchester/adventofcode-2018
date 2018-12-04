@@ -10,20 +10,16 @@ defmodule Advent do
   def day_1_1 do
     "input1.txt"
     |> input_file_to_stream()
-    |> Enum.map(fn line ->
-      {integer, _} = Integer.parse(line)
-      integer
-    end)
+    |> Stream.map(&String.to_integer/1)
+    |> Enum.to_list()
     |> Advent.Day1.final_frequency()
   end
 
   def day_1_2 do
     "input1.txt"
     |> input_file_to_stream()
-    |> Enum.map(fn line ->
-      {integer, _} = Integer.parse(line)
-      integer
-    end)
+    |> Stream.map(&String.to_integer/1)
+    |> Enum.to_list()
     |> Advent.Day1.first_repeated_frequency()
   end
 
@@ -56,12 +52,12 @@ defmodule Advent do
     |> Advent.Day3.overlap_area()
   end
 
-  # def day_3_2 do
-  #   "input3.txt"
-  #   |> input_file_to_stream()
-  #   |> Enum.to_list()
-  #   |> Advent.Day3.2()
-  # end
+  def day_3_2 do
+    "input3.txt"
+    |> input_file_to_stream()
+    |> Enum.to_list()
+    |> Advent.Day3.intact_claim()
+  end
 
   # ----------------------------------------------------------------------------
   # Helpers

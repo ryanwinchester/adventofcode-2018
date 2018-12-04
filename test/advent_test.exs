@@ -68,5 +68,13 @@ defmodule AdventTest do
         "#3 @ 5,5: 2x2",
       ]) == 4
     end
+
+    test "intact_claim" do
+      assert intact_claim([
+        "#1 @ 1,3: 4x4",
+        "#2 @ 3,1: 4x4",
+        "#3 @ 5,5: 2x2",
+      ]) == 3
+    end
   end
 end

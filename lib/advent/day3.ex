@@ -62,20 +62,88 @@ defmodule Advent.Day3 do
   If the Elves all proceed with their own plans, none of them will have enough
   fabric. How many square inches of fabric are within two or more claims?
 
+  --- Part Two ---
+
+  Amidst the chaos, you notice that exactly one claim doesn't overlap by even a
+  single square inch of fabric with any other claim. If you can somehow draw
+  attention to it, maybe the Elves will be able to make Santa's suit after all!
+
+  For example, in the claims above, only claim 3 is intact after all claims are
+  made.
+
+  What is the ID of the only claim that doesn't overlap?
+
   """
 
-  def overlap_area(claims) do
-    claims
+  def overlap_area(raw_claims) do
+    raw_claims
     |> parse_claims()
+    |> Enum.map(&claim_to_points/1)
+    |> List.flatten()
+    # Remove the ID from the tuple, we just want the point coordinate pair.
+    |> Enum.map(fn {_id, point} -> point end)
+    # Group by coordinate pairs.
+    |> Enum.group_by(&(&1))
+    # Remove the ones with no overlaps.
+    |> Enum.filter(fn {_k, v} -> Enum.count(v) > 1 end)
+    # Count the points that have overlaps.
+    |> Enum.count()
   end
 
+  def intact_claim(raw_claims) do
+    parsed_claims =
+      raw_claims
+      |> parse_claims()
+      |> Enum.map(&claim_to_points/1)
+      |> List.flatten()
+      |> Enum.group_by(fn {_id, point} -> point end)
+      |> Map.values()
+
+    claims_with_overlap =
+      parsed_claims
+      |> Enum.filter(&(Enum.count(&1) > 1))
+      |> List.flatten()
+      |> Enum.map(fn {id, _point} -> id end)
+      |> Enum.uniq()
+
+    claim_ids =
+      parsed_claims
+      |> List.flatten()
+      |> Enum.map(fn {id, _point} -> id end)
+      |> Enum.uniq()
+
+    [id] = (claim_ids -- claims_with_overlap)
+
+    id
+  end
+
+  # Parses claims like:
+  #
+  #     "#123 @ 3,2: 5x4"
+  #
+  # into something like:
+  #
+  #     %{"id" => 123, "x" => 3, "y" => 2, "w" => 5, "h" => 4}
+  #
   defp parse_claims(claims) do
-    claims
-    |> Enum.map(fn claim ->
+    Enum.map(claims, fn claim ->
       Regex.named_captures(~r/^#(?<id>\d+) @ (?<x>\d+),(?<y>\d+): (?<w>\d+)x(?<h>\d+)$/, claim)
       |> Enum.map(fn {k, v} -> {k, String.to_integer(v)} end)
       |> Enum.into(%{})
-      |> IO.inspect()
     end)
+  end
+
+  # Converts a parsed claim like:
+  #
+  #     %{"id" => 123, "x" => 1, "y" => 1, "w" => 2, "h" => 2}
+  #
+  # into a list of points, which are tuples in the form of `{id, {x, y}}`, like:
+  #
+  #     [{123, {1, 1}, {123, {1, 2}, {123, {2, 1}, {123, {2, 2}]
+  #
+  defp claim_to_points(claim) do
+    for x <- 0..(claim["w"] - 1), y <- 0..(claim["h"] - 1) do
+      {claim["id"], {claim["x"] + x, claim["y"] + y}}
+    end
   end
 end
