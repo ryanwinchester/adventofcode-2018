@@ -112,7 +112,11 @@ defmodule Advent.Day3 do
 
   ## Example
 
-      iex> Advent.Day3.intact_claim(["#1 @ 1,3: 4x4", "#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2"])
+      iex> Advent.Day3.intact_claim([
+      ...>   "#1 @ 1,3: 4x4",
+      ...>   "#2 @ 3,1: 4x4",
+      ...>   "#3 @ 5,5: 2x2"
+      ...> ])
       3
 
   """
@@ -150,7 +154,15 @@ defmodule Advent.Day3 do
   ## Example
 
       iex> Advent.Day3.parse_claims(["#123 @ 3,2: 5x4"])
-      [%{"id" => 123, "x" => 3, "y" => 2, "w" => 5, "h" => 4}]
+      [
+        %{
+          "id" => 123,
+          "x" => 3,
+          "y" => 2,
+          "w" => 5,
+          "h" => 4
+        }
+      ]
 
   """
   @spec parse_claims([binary]) :: [map]
@@ -170,14 +182,22 @@ defmodule Advent.Day3 do
 
   into a list of points, which are tuples in the form of `{id, {x, y}}`, like:
 
-      [{id, {x1, y1}, {id, {x2, y2}, ...]
+      [
+        {id, {x1, y1},
+        {id, {x2, y2},
+        ...
+      ]
 
   ## Example
 
-      iex> Advent.Day3.claim_to_points(%{
-      ...>   "id" => 123, "x" => 1, "y" => 1, "w" => 2, "h" => 2
-      ...> })
-      [{123, {1, 1}}, {123, {1, 2}}, {123, {2, 1}}, {123, {2, 2}}]
+      iex> claim = %{"id" => 123, "x" => 1, "y" => 1, "w" => 2, "h" => 2}
+      iex> Advent.Day3.claim_to_points(claim)
+      [
+        {123, {1, 1}},
+        {123, {1, 2}},
+        {123, {2, 1}},
+        {123, {2, 2}}
+      ]
 
   """
   @spec claim_to_points(map) :: [{id :: pos_integer, {x :: integer, y :: integer}}]
