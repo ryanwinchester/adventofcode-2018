@@ -60,6 +60,24 @@ defmodule Advent do
   end
 
   # ----------------------------------------------------------------------------
+  # Day 4
+  # ----------------------------------------------------------------------------
+
+  def day_4_1 do
+    "input4.txt"
+    |> input_file_to_stream()
+    |> Enum.to_list()
+    |> Advent.Day4.guard_with_most_sleep_times_most_slept_minute()
+  end
+
+  def day_4_2 do
+    "input4.txt"
+    |> input_file_to_stream()
+    |> Enum.to_list()
+    |> Advent.Day4.guard_id_times_most_slept_minute()
+  end
+
+  # ----------------------------------------------------------------------------
   # Helpers
   # ----------------------------------------------------------------------------
 
