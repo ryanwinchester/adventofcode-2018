@@ -329,12 +329,10 @@ defmodule Advent.Day4 do
   def minute_with_most_sleep(timestamps) do
     timestamps
     |> sleep_minutes()
-    |> Enum.flat_map(fn {id, sleep_chunk} -> Enum.map(sleep_chunk, &({id, &1})) end)
+    |> Enum.flat_map(fn {id, sleep_chunk} -> Enum.map(sleep_chunk, &{id, &1}) end)
     |> Enum.group_by(& &1)
     |> Enum.map(fn {{id, min}, mins} -> {{id, min}, Enum.count(mins)} end)
-    |> Enum.sort(
-      fn {a1, b1}, {a2, b2} -> if b1 == b2, do: a1 <= a2, else: b1 > b2 end
-    )
+    |> Enum.sort(fn {a1, b1}, {a2, b2} -> if b1 == b2, do: a1 <= a2, else: b1 > b2 end)
     |> List.first()
     |> elem(0)
   end
@@ -366,25 +364,25 @@ defmodule Advent.Day4 do
   """
   def sleep_minutes(timestamps) do
     {_, _, sleeping} =
-    timestamps
-    |> Enum.sort()
-    |> Enum.reduce({nil, nil, []}, fn t, {current_guard, started_sleep, sleep_minutes} ->
-      with nil <- Regex.named_captures(~r/Guard #(?<id>\d+)/, t),
-           nil <- Regex.named_captures(~r/00:(?<start>\d+)] falls asleep/, t),
-           nil <- Regex.named_captures(~r/00:(?<end>\d+)] wakes up/, t) do
-        {current_guard, started_sleep, sleep_minutes}
-      else
-        %{"id" => new_guard} ->
-          {String.to_integer(new_guard), nil, sleep_minutes}
+      timestamps
+      |> Enum.sort()
+      |> Enum.reduce({nil, nil, []}, fn t, {current_guard, started_sleep, sleep_minutes} ->
+        with nil <- Regex.named_captures(~r/Guard #(?<id>\d+)/, t),
+             nil <- Regex.named_captures(~r/00:(?<start>\d+)] falls asleep/, t),
+             nil <- Regex.named_captures(~r/00:(?<end>\d+)] wakes up/, t) do
+          {current_guard, started_sleep, sleep_minutes}
+        else
+          %{"id" => new_guard} ->
+            {String.to_integer(new_guard), nil, sleep_minutes}
 
-        %{"start" => min} ->
-          {current_guard, String.to_integer(min), sleep_minutes}
+          %{"start" => min} ->
+            {current_guard, String.to_integer(min), sleep_minutes}
 
-        %{"end" => min} ->
-          slept_for = started_sleep..String.to_integer(min)
-          {current_guard, nil, [{current_guard, slept_for} | sleep_minutes]}
-      end
-    end)
+          %{"end" => min} ->
+            slept_for = started_sleep..String.to_integer(min)
+            {current_guard, nil, [{current_guard, slept_for} | sleep_minutes]}
+        end
+      end)
 
     Enum.sort_by(sleeping, fn {id, _minutes} -> id end)
   end

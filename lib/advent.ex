@@ -78,6 +78,22 @@ defmodule Advent do
   end
 
   # ----------------------------------------------------------------------------
+  # Day 5
+  # ----------------------------------------------------------------------------
+
+  def day_5_1 do
+    "input5.txt"
+    |> input_file_to_string()
+    |> Advent.Day5.unreacted_units_count()
+  end
+
+  def day_5_2 do
+    "input5.txt"
+    |> input_file_to_string()
+    |> Advent.Day5.best_possible_polymer_length()
+  end
+
+  # ----------------------------------------------------------------------------
   # Helpers
   # ----------------------------------------------------------------------------
 
@@ -86,5 +102,12 @@ defmodule Advent do
     |> Path.expand("priv/input")
     |> File.stream!()
     |> Stream.map(&String.trim/1)
+  end
+
+  defp input_file_to_string(filename) do
+    filename
+    |> Path.expand("priv/input")
+    |> File.read!()
+    |> String.trim()
   end
 end
