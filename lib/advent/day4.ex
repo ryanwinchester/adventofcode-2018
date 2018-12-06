@@ -206,7 +206,7 @@ defmodule Advent.Day4 do
     |> Enum.map(fn {guard, ranges} ->
       total_minutes =
         ranges
-        |> Enum.map(&(Enum.at(&1, -1) - Enum.at(&1, 0)))
+        |> Enum.map(&Enum.count/1)
         |> Enum.sum()
 
       {guard, total_minutes}
