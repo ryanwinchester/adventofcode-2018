@@ -29,8 +29,7 @@ defmodule Advent.Day5 do
   def react(polymer) do
     polymer
     |> String.codepoints()
-    |> Enum.reverse()
-    |> Enum.reduce([""], fn unit, [prev_unit | tail] = acc ->
+    |> List.foldr([""], fn unit, [prev_unit | tail] = acc ->
       if reacts?(unit, prev_unit), do: tail, else: [unit | acc]
     end)
     |> Enum.join()
