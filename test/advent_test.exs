@@ -8,6 +8,7 @@ defmodule AdventTest do
   doctest Advent.Day3
   doctest Advent.Day4
   doctest Advent.Day5
+  doctest Advent.Day6
 
   test "day_1_1", do: assert(day_1_1() == 510)
   test "day_1_2", do: assert(day_1_2() == 69074)
@@ -23,4 +24,6 @@ defmodule AdventTest do
 
   test "day_5_1", do: assert(day_5_1() == 11476)
   test "day_5_2", do: assert(day_5_2() == 5446)
+
+  test "day_6_1", do: assert(day_6_1() == 2906)
 end

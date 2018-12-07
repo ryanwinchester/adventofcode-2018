@@ -94,6 +94,28 @@ defmodule Advent do
   end
 
   # ----------------------------------------------------------------------------
+  # Day 6
+  # ----------------------------------------------------------------------------
+
+  def day_6_1 do
+    "input6.txt"
+    |> input_file_to_stream()
+    |> Enum.to_list()
+    |> Enum.map(fn p ->
+      %{"x" => x, "y" => y} = Regex.named_captures(~r/(?<x>\d+), (?<y>\d+)/, p)
+      {String.to_integer(x), String.to_integer(y)}
+    end)
+    |> Advent.Day6.largest_non_infinite_area()
+  end
+
+  # def day_6_2 do
+  #   "input6.txt"
+  #   |> input_file_to_stream()
+  #   |> Enum.to_list()
+  #   |> Advent.Day6.6()
+  # end
+
+  # ----------------------------------------------------------------------------
   # Helpers
   # ----------------------------------------------------------------------------
 
