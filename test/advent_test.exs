@@ -26,4 +26,5 @@ defmodule AdventTest do
   test "day_5_2", do: assert(day_5_2() == 5446)
 
   test "day_6_1", do: assert(day_6_1() == 2906)
+  test "day_6_2", do: assert(day_6_2() == 50530)
 end
