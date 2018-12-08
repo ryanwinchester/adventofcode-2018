@@ -1,6 +1,7 @@
 defmodule Advent.Day5 do
   @moduledoc """
-  --- Day 5: Alchemical Reduction ---
+  # Day 5: Alchemical Reduction
+
   See description: https://adventofcode.com/2018/day/5
   """
 

@@ -1,9 +1,8 @@
 defmodule Advent.Day6 do
   @moduledoc """
-  # --- Day 6: Chronal Coordinates ---
+  # Day 6: Chronal Coordinates
 
   See: https://adventofcode.com/2018/day/6
-
   """
 
   @doc """
